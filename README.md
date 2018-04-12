@@ -13,13 +13,15 @@ yarn add broccoli-jscodeshift
 const JSCodeShift = require('broccoli-jscodeshift');
 
 module.export = new JSCodeShift(['./src'], {
-  transform: '...' // Some path to a codemod hosted somewhere
+  transform: 'https://raw.githubusercontent.com/mikaelbr/rm-debugger/master/index.js'
 });
 ```
 
 ### Arguments
 
-`input` : The input node, either a Broccoli tree or array of strings
-`options`
-`options.tranform` : A path to the transform to execute
-`options.resultsCallback` : (optional) A callback to execute with the results from JSCodeShift
+```txt
+input              : (required) The input node, either a Broccoli tree or array of strings
+options
+  .transform       : (required) A path to the transform to execute
+  .resultsCallback : (optional) A callback to execute with the results from JSCodeShift`
+```
