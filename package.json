@@ -1,6 +1,6 @@
 {
   "name": "broccoli-jscodeshift",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Broccoli plugin for running jscodeshift transforms",
   "main": "index.js",
   "author": "Alex LaFroscia <alex@lafroscia.com>",
