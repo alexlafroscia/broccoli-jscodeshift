@@ -4,6 +4,9 @@ const Plugin = require('broccoli-caching-writer');
 const Runner = require('jscodeshift/src/Runner');
 const fs = require('fs-extra');
 
+const logCopy = require('debug')('broccoli-jscodeshift:copy');
+const logTransform = require('debug')('broccoli-jscodeshift:transform');
+
 JSCodeShift.prototype = Object.create(Plugin.prototype);
 JSCodeShift.prototype.constructor = JSCodeShift;
 function JSCodeShift(inputNodes, options = {}) {
@@ -25,11 +28,14 @@ JSCodeShift.prototype.build = function() {
       basePath = path.join(process.cwd(), basePath);
     }
 
-    fs.copySync(
-      path.join(basePath, relativePath),
-      path.join(this.outputPath, relativePath)
-    );
+    const from = path.join(basePath, relativePath);
+    const to = path.join(this.outputPath, relativePath);
+    logCopy('Copying %o to %o', from, to);
+
+    fs.copySync(from, to, { dereference: true });
   }
+
+  logTransform('Running %o on %o', this.transform, this.outputPath);
 
   return Runner.run(this.transform, [this.outputPath], {
     verbose: 0,

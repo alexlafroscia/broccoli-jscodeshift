@@ -89,6 +89,31 @@ test.serial('it works on a relative string node', async function(t) {
   t.truthy(originalContent.includes('debugger'));
 });
 
+test.serial('it does not modify symlinked files directly', async function(t) {
+  const transformed = new JSCodeShift('./fixtures/symlink', {
+    transform:
+      'https://raw.githubusercontent.com/mikaelbr/rm-debugger/master/index.js'
+  });
+
+  builder = new broccoli.Builder(transformed);
+  await builder.build();
+
+  const outputContent = fs.readFileSync(builder.outputPath + '/index.js', {
+    encoding: 'utf8'
+  });
+
+  t.falsy(outputContent.includes('debugger'));
+
+  const originalContent = fs.readFileSync(
+    path.join(process.cwd(), './fixtures/basic/index.js'),
+    {
+      encoding: 'utf8'
+    }
+  );
+
+  t.truthy(originalContent.includes('debugger'));
+});
+
 test.serial('it works with an absolute string node', async function(t) {
   const transformed = new JSCodeShift(
     path.join(process.cwd(), './fixtures/basic'),
