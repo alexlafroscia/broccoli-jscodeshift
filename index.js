@@ -8,7 +8,10 @@ const logCopy = require('debug')('broccoli-jscodeshift:copy');
 const logTransform = require('debug')('broccoli-jscodeshift:transform');
 
 function isEmptyInputError(error) {
-  return error.message === "Cannot read property 'Symbol(Symbol.iterator)' of undefined";
+  return (
+    error.message ===
+    "Cannot read property 'Symbol(Symbol.iterator)' of undefined"
+  );
 }
 
 JSCodeShift.prototype = Object.create(Plugin.prototype);
