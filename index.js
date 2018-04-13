@@ -7,6 +7,10 @@ const fs = require('fs-extra');
 const logCopy = require('debug')('broccoli-jscodeshift:copy');
 const logTransform = require('debug')('broccoli-jscodeshift:transform');
 
+function isEmptyInputError(error) {
+  return error.message === "Cannot read property 'Symbol(Symbol.iterator)' of undefined";
+}
+
 JSCodeShift.prototype = Object.create(Plugin.prototype);
 JSCodeShift.prototype.constructor = JSCodeShift;
 function JSCodeShift(inputNodes, options = {}) {
@@ -43,7 +47,16 @@ JSCodeShift.prototype.build = function() {
     extensions: 'js',
     silent: true,
     parser: 'babel'
-  }).then(this.resultsCallback);
+  })
+    .then(this.resultsCallback)
+    .catch(error => {
+      // JSCodeShift will throw an error when the node is empty. We don't actually care.
+      if (isEmptyInputError(error)) {
+        return;
+      }
+
+      throw error;
+    });
 };
 
 module.exports = JSCodeShift;

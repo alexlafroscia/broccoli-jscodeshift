@@ -174,3 +174,15 @@ test.serial('it can invoke a callback after processing', async function() {
     times: 1
   });
 });
+
+test('it does not fail if the input node is empty', async function() {
+  const inputNode = new Fixturify({});
+
+  const transformed = new JSCodeShift(inputNode, {
+    transform:
+      'https://raw.githubusercontent.com/mikaelbr/rm-debugger/master/index.js'
+  });
+
+  builder = new broccoli.Builder(transformed);
+  await builder.build();
+});
